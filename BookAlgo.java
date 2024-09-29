@@ -10,7 +10,6 @@ class Edge  implements Comparable<Edge> {
     public Edge(long u, long v) {
         this.u = u;
         this.v = v;
-        this.diff = v - u;
         this.rank = Long.MAX_VALUE;  // Initialize rank with a placeholder value
         this.crossingCount = 0;
     }
@@ -89,46 +88,7 @@ public class BookAlgo {
         return true;
     }
 
-    static boolean allHasLessRank(List<Edge> page, Edge removedEdge) {
-        for(Edge e : page) {
-            if(crossing(e, removedEdge)) {
-                if(removedEdge.rank > e.rank) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    static  void fixedEdge( List<List<Edge>> pagelist , Edge removedEdge , int index) {
-        int flag=0;
-        for(long i=index ; i<pagelist.size(); i++){
-            if(isSafeOnPage(pagelist.get((int)i) , removedEdge)){
-                pagelist.get((int)i).add(removedEdge);
-                flag=1;
-                break;
-            }else{
-                if(allHasLessRank(pagelist.get((int)i) , removedEdge)){
-                    List<Edge> tempList = new ArrayList<>(pagelist.get((int)i));
-                    for(Edge e: tempList){
-                        if(crossing(e , removedEdge)){
-                            fixedEdge(pagelist , e , (int)i+1);
-                            pagelist.get((int)i).remove(e);
-                        }
-                    }
-                    pagelist.get((int)i).add(removedEdge);
-                    flag=1;
-                    break;
-                }
-            }
-        }
-        if(flag==0){
-            List<Edge> page = new ArrayList<>();
-            page.add(removedEdge);
-            pagelist.add(page);
-        }
-    }
-
+   
     public static long n;
     public  static HashSet<Edge> edges = new HashSet<Edge>();
     public  static ArrayList<Edge> rankEdges = new ArrayList<Edge>();
@@ -148,11 +108,7 @@ public class BookAlgo {
 
 //        kn
 
-//          for (long i = 0; i < n; i++) {
-//              for (long j = i + 1; j < n; j++) {
-//                  edges.add(new Edge(i, j));
-//              }
-//          }
+//          
 
           Ranking ranking = new Ranking();
           ranking.RankFun();
